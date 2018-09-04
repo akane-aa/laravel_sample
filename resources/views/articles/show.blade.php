@@ -9,22 +9,23 @@
         <div class="body">{{ $article->body }}</div>
     </article>
 
-    <br>
+    {{-- 追加 --}}
+    @unless ($article->tags->isEmpty())
+        <h5>Tags:</h5>
+        <ul>
+            @foreach($article->tags as $tag)
+                <li>{{ $tag->name }}</li>
+            @endforeach
+        </ul>
+    @endunless
 
-    <div>
-        {{-- ログインしている時だけ表示 --}}
-        @auth
-            <a>id]) }}"
-                class="btn btn-primary"
-            >
-                編集
-            </a>
-
-            {!! delete_form(['articles', $article->id]) !!}
-        @endauth
-
-        <a href="{{ route('articles.index') }}" class="btn btn-secondary float-right">
-            一覧へ戻る
+    @auth
+        <a href="{{ route('articles.edit', ['id' => $article->id]) }}"
+            class="btn btn-primary"
+        >
+            編集
         </a>
-    </div>
+
+        {!! delete_form(route('articles.destroy', ['id' => $article->id]), '削除') !!}
+    @endauth
 @endsection

@@ -14,7 +14,7 @@ class ArticlesController extends Controller
         $this->middleware('auth')
             ->except(['index', 'show']);
     }
-    
+
   public function index() {
       $articles = Article::latest('published_at')->latest('created_at')
       ->published()
@@ -22,7 +22,7 @@ class ArticlesController extends Controller
       return view('articles.index', compact('articles'));
   }
 
-  public function show($id) {
+  public function show(Article $article) {
     $article = Article::findOrFail($id);
 
       return view('articles.show', compact('article'));
@@ -30,31 +30,31 @@ class ArticlesController extends Controller
 
   public function create()
     {
+        $tag_list = Tag::pluck('name', 'id');
         return view('articles.create');
     }
 
     public function store(Request $request) {
-        Article::create($request->validated());
+        $article = Auth::user()->articles()->create($request->validated());
+        $article->tags()->attach($request->input('tags'));
         return redirect()->route('articles.index')
         ->with('message', '記事を追加しました。');
       }
 
-      public function edit($id) {
-          $article = Article::findOrFail($id);
+      public function edit(Article $article) {
+          $tag_list = Tag::pluck('name', 'id');
 
           return view('articles.edit', compact('article'));
       }
 
-      public function update(ArticleRequest $request, $id) {
-          $article = Article::findOrFail($id);
-
+      public function update(ArticleRequest $request, Article $article) {
           $article->update($request->validated());
-
+          $article->tags()->sync($request->input('tags'));
           return redirect()->route('articles.show', [$article->id])
           ->with('message', '記事を更新しました。');
       }
 
-      public function destroy($id) {
+      public function destroy(Article $article) {
         $article = Article::findOrFail($id);
 
         $article->delete();

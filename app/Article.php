@@ -27,5 +27,14 @@ class Article extends Model
         $query->where('published_at', '<=', Carbon::now());
     }
 
+    public function user()
+   {
+       return $this->belongsTo('App\User');
+   }
+
+   public function tags()
+    {
+        return $this->belongsToMany('App\Tag')->withTimestamps();
+    }
 
 }

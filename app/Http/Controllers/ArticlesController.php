@@ -25,13 +25,7 @@ class ArticlesController extends Controller
     }
 
     public function store(Request $request) {
-      $rules = [
-            'title' => 'required|min:3',
-            'body' => 'required',
-            'published_at' => 'required|date',
-        ];
-        $validated = $this->validate($request, $rules);
-        Article::create($validated);
+        Article::create($request->validated());
         return redirect('articles');
       }
 }

@@ -18,14 +18,15 @@ class ArticlesTableSeeder extends Seeder
     {
       DB::table('articles')->delete();
 
-      $faker = Faker::create('en_US');
-
-      for ($i = 0; $i < 10; $i++) {
-          Article::create([
-              'title' => $faker->sentence(),
-              'body' => $faker->paragraph(),
-              'published_at' => Carbon::today()
-          ]);
-      }
+      factory(App\Article::class, 20)->create();
+      // $faker = Faker::create('en_US');
+      //
+      // for ($i = 0; $i < 10; $i++) {
+      //     Article::create([
+      //         'title' => $faker->sentence(),
+      //         'body' => $faker->paragraph(),
+      //         'published_at' => Carbon::today()
+      //     ]);
+      // }
     }
 }

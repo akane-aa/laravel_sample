@@ -29,7 +29,8 @@ class ArticlesController extends Controller
 
     public function store(Request $request) {
         Article::create($request->validated());
-        return redirect('articles')->with('message', '記事を追加しました。');
+        return redirect()->route('articles.index')
+        ->with('message', '記事を追加しました。');
       }
 
       public function edit($id) {
@@ -43,7 +44,8 @@ class ArticlesController extends Controller
 
           $article->update($request->validated());
 
-          return redirect(url('articles', [$article->id]))->with('message', '記事を更新しました。');
+          return redirect()->route('articles.show', [$article->id])
+          ->with('message', '記事を更新しました。');
       }
 
       public function destroy($id) {

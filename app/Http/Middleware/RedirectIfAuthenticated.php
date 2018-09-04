@@ -15,12 +15,14 @@ class RedirectIfAuthenticated
      * @param  string|null  $guard
      * @return mixed
      */
-    public function handle($request, Closure $next, $guard = null)
-    {
-        if (Auth::guard($guard)->check()) {
-            return redirect('/home');
-        }
+     public function handle($request, Closure $next, $guard = null)
+     {
+         if (Auth::guard($guard)->check()) {
+             // リダイレクト先を修正
+             // return redirect('/home');
+             return redirect(route('dashboard'));
+         }
 
-        return $next($request);
-    }
+         return $next($request);
+     }
 }

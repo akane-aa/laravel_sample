@@ -18,6 +18,8 @@ class Article extends Model
     {
         // 小文字に変換
         $this->attributes['title'] = mb_strtolower($value);
-    }
+    };
+
+    protected $dates = ['published_at'];
 
 }

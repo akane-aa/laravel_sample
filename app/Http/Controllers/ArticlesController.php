@@ -29,7 +29,7 @@ class ArticlesController extends Controller
 
     public function store(Request $request) {
         Article::create($request->validated());
-        return redirect('articles');
+        return redirect('articles')->with('message', '記事を追加しました。');
       }
 
       public function edit($id) {
@@ -51,6 +51,6 @@ class ArticlesController extends Controller
 
         $article->delete();
 
-        return redirect('articles');
+        return redirect('articles')->with('message', '記事を削除しました。');
     }
 }

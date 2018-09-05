@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use App\Http\Requests\ArticleRequest;
 use App\Article;
-use Carbon\Carbon;
+use App\Tag;
+use App\Http\Requests\ArticleRequest;
+use Illuminate\Support\Facades\Auth;
 
 class ArticlesController extends Controller
 {
@@ -23,20 +23,19 @@ class ArticlesController extends Controller
   }
 
   public function show(Article $article) {
-    $article = Article::findOrFail($id);
-
-      return view('articles.show', compact('article'));
+    return view('articles.show', compact('article'));
   }
 
   public function create()
     {
         $tag_list = Tag::pluck('name', 'id');
-        return view('articles.create');
+        return view('articles.create', compact('tag_list'));
     }
 
-    public function store(Request $request) {
+    public function store(ArticleRequest $request) {
         $article = Auth::user()->articles()->create($request->validated());
         $article->tags()->attach($request->input('tags'));
+
         return redirect()->route('articles.index')
         ->with('message', '記事を追加しました。');
       }
@@ -44,18 +43,18 @@ class ArticlesController extends Controller
       public function edit(Article $article) {
           $tag_list = Tag::pluck('name', 'id');
 
-          return view('articles.edit', compact('article'));
+          return view('articles.edit', compact('article', 'tag_list'));
       }
 
-      public function update(ArticleRequest $request, Article $article) {
+      public function update(Article $article, ArticleRequest $request) {
           $article->update($request->validated());
           $article->tags()->sync($request->input('tags'));
+
           return redirect()->route('articles.show', [$article->id])
           ->with('message', '記事を更新しました。');
       }
 
       public function destroy(Article $article) {
-        $article = Article::findOrFail($id);
 
         $article->delete();
 

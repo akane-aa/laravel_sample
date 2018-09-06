@@ -16,9 +16,9 @@ class ArticlesController extends Controller
     }
 
   public function index() {
-      $articles = Article::latest('published_at')->latest('created_at')
-      ->published()
-      ->get();
+      // $articles = Article::latest('published_at')->latest('created_at')
+      $articles = Article::orderBy('published_at', 'desc')->orderBy('created_at', 'desc')->paginate(10);
+
       return view('articles.index', compact('articles'));
   }
 

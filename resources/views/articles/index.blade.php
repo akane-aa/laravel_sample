@@ -17,7 +17,16 @@
                 <a href="{{ route('articles.show', $article->id) }}">{{ $article->title }}</a>
             </h2>
             <div class="body">{{ $article->body }}</div>
+
+            @unless ($article->tags->isEmpty())
+
+                   @foreach($article->tags as $tag)
+
+                      <span class="glyphicon glyphicon-apple" aria-hidden="true">{{ $tag->name }}</span>
+                   @endforeach
+
+            @endunless
         </article>
     @endforeach
-    {{ $articles->links() }} 
+    {{ $articles->links() }}
 @endsection
